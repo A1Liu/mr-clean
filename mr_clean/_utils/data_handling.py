@@ -13,7 +13,7 @@ def cols(df):
 #def is_num(series): #TODO improve this method
 #    if (series.dtype == np.object):
 #        return False
-    return True
+#    return True
 
 def get_cutoff(column, cutoff):
     __value_or_container(column,cutoff,1)   

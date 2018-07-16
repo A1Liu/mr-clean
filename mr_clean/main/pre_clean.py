@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-from mr_clean._utils.io import preview,get_info,output_to_file,title_line,format_row
+import pandas as _pd
+import mr_clean._utils.io as _io
+#import preview,get_info,output_to_file,title_line,format_row
 from mr_clean._utils.data_handling import rows
-from mr_clean.functions.stats import percentiles,dtypes_summary
+import mr_clean.functions.stats as stats
 # Pre-cleaning
 
 # This method takes in a DataFrame object, as well as a few parameters,
@@ -34,13 +35,13 @@ def summarize(df,preview_rows = 5,preview_max_cols = 0,
         If True and output_file is not None, this function will not overwrite any
         existing files.
     """
-    assert type(df) is pd.DataFrame
+    assert type(df) is _pd.DataFrame
 
     # --------Values of data-----------
-    df_preview = preview(df,preview_rows = 5,preview_max_cols = 0)
-    info = get_info(df,verbose = True, max_cols = None,memory_usage = memory_usage,null_counts = True)
-    percent_values = percentiles(df)
-    dtypes = dtypes_summary(df).apply(format_row,args = [rows(df)],axis = 1)
+    df_preview = _io.preview(df,preview_rows = 5,preview_max_cols = 0)
+    info = _io.get_info(df,verbose = True, max_cols = None,memory_usage = memory_usage,null_counts = True)
+    percent_values = stats.percentiles(df)
+    dtypes = stats.dtypes_summary(df).apply(_io.format_row,args = [rows(df)],axis = 1)
     dtypes.columns = df.columns
     potential_outliers = None # TODO add 'potential outliers' output
 
@@ -50,6 +51,8 @@ def summarize(df,preview_rows = 5,preview_max_cols = 0,
     if percent_values is not None:
         title_list.append('Percentile Details')
         info_list.append(percent_values)
+    else:
+        print('Percentiles skipped: No numeric data')
     title_list+=['Missing Values Summary','Potential Outliers']
     info_list+=[dtypes,potential_outliers]
     output = zip(title_list,info_list)
@@ -57,24 +60,25 @@ def summarize(df,preview_rows = 5,preview_max_cols = 0,
     # -------Print or output-----------
 
     # Get initial display settings
-    initial_max_cols = pd.get_option('display.max_columns')
-    initial_max_rows = pd.get_option('display.max_rows')
-    initial_width = pd.get_option('display.width')
+    initial_max_cols = _pd.get_option('display.max_columns')
+    initial_max_rows = _pd.get_option('display.max_rows')
+    initial_width = _pd.get_option('display.width')
 
     # Reformat displays
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.max_rows',None)
+    _pd.set_option('display.max_columns', None)
+    _pd.set_option('display.max_rows',None)
     if display_width is not None:
-            pd.set_option('display.width',display_width)
+            _pd.set_option('display.width',display_width)
 
     #Output information to print line or file
     if output_file is None:
          for title, value in output:
-            print(title_line(title))
+            print(_io.title_line(title))
             print(value)
     else:
-        output_to_file(df,output_file,output_safe)
+        print('Outputting to file...')
+        _io.output_to_file(df,output_file,output_safe)
     # Reset display settings
-    pd.set_option('display.max_columns', initial_max_cols)
-    pd.set_option('display.max_columns', initial_max_rows)
-    pd.set_option('display.max_columns', initial_width)
+    _pd.set_option('display.max_columns', initial_max_cols)
+    _pd.set_option('display.max_columns', initial_max_rows)
+    _pd.set_option('display.max_columns', initial_width)

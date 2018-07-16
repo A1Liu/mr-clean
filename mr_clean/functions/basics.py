@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-from mr_clean._utils.data_handling import cols
+import pandas as _pd
+import mr_clean._utils.data_handling as _dutils
+import mr_clean._utils.globals as _globals
 from collections import deque
 
 #None of these functions should have much logic.
@@ -23,7 +24,7 @@ def colname_gen(df,col_name = 'unnamed_col'):
 
 def clean_colnames(df):
     col_list = []
-    for index in range(cols(df)):
+    for index in range(_dutils.cols(df)):
         col_list.append(df.columns[index].strip().lower().replace(' ','_'))
     df.columns = col_list
 
@@ -55,14 +56,14 @@ def col_scrubb(df,col_name,which, count = 1,dest = False):
         return new_col
 
 def col_to_numeric(df,col_name, dest = False):
-    new_col = pd.to_numeric(df[col_name], errors = 'coerce')
+    new_col = _pd.to_numeric(df[col_name], errors = 'coerce')
     if dest:
         set_col(df,col_name,new_col)
     else:
         return new_col
 
 def col_to_dt(df,col_name,set_format = None,infer_format = True, dest = False):
-    new_col = pd.to_datetime(df[col_name],errors = 'coerce',
+    new_col = _pd.to_datetime(df[col_name],errors = 'coerce',
                                     format = set_format,infer_datetime_format = infer_format)
     if dest:
         set_col(df,col_name,new_col)
@@ -147,9 +148,8 @@ def col_dtypes(df): # Does some work to reduce possibility of errors and stuff
     to be done.
     """
     test_list = [col_isobj,col_isnum,col_isdt,col_iscat,col_istdelt,col_isdtz]
-    names_list = ["object","number","datetime","category","timedelta","datetimetz"]
     deque_list = [(deque(col_method(df)),name) \
-                  for col_method,name in zip(test_list,names_list) if len(col_method(df))]
+                  for col_method,name in zip(test_list,_globals.__dtype_names) if len(col_method(df))]
     type_dict = {}
     for col_name in df.columns:
         for que,name in deque_list:
