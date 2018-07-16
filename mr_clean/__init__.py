@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+__all__ = ['_utils','functions','main','stats']
 dependencies = ['pandas','numpy']
 missing_dependencies = []
 
@@ -16,4 +16,4 @@ del(dependencies)
 del(dependency)
 del(missing_dependencies)
 
-from mr_clean.main.api import *
+from mr_clean._startup.api import *
