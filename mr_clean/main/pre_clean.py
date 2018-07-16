@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
-from mc_io import preview,get_info,output_to_file,title_line,format_row
-from mc_stats import percentiles,dtypes_summary
-from mc_utils import rows
+from mr_clean._utils.io import preview,get_info,output_to_file,title_line,format_row
+from mr_clean._utils.data_handling import rows
+from mr_clean.functions.stats import percentiles,dtypes_summary
 # Pre-cleaning
 
 # This method takes in a DataFrame object, as well as a few parameters,
 # and outputs a DataFrame that summarizes some of the possible problems
 # that might have to be addressed in cleaning
-def summary(df,preview_rows = 5,preview_max_cols = 0,
+def summarize(df,preview_rows = 5,preview_max_cols = 0,
             memory_usage = 'deep',display_width = None,
             output_file = None, output_safe = True):
     """ Prints information about the DataFrame to a file or to the prompt.

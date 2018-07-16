@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
-from mc_utils import cols
+from mr_clean._utils.data_handling import cols
 from collections import deque
 
 #None of these functions should have much logic.
@@ -37,7 +37,7 @@ def col_strip(df,col_name,dest = False):
         df[col_name] = df[col_name].str.strip()
     else:
         return df[col_name].str.strip()
-    
+
 def col_scrubf(df,col_name,which,count = 1,dest = False):
     if dest:
         df.loc[which,col_name] = df.loc[which,col_name].str[count:]
@@ -45,7 +45,7 @@ def col_scrubf(df,col_name,which,count = 1,dest = False):
         new_col = df[col_name].copy()
         new_col[which] = df.loc[which,col_name].str[count:]
         return new_col
-    
+
 def col_scrubb(df,col_name,which, count = 1,dest = False):
     if dest:
         df.loc[which,col_name] = df.loc[which,col_name].str[:-count]
@@ -99,7 +99,7 @@ def col_mod(df,col_name,func,*args,**kwargs):
         df[col_name] = backup
 
 # ------- Blind operations on multiple columns ----------
-    
+
 def cols_strip(df,col_list, dest = False):
     if not dest:
         return [col_strip(df,col_name) for col_name in col_list]
@@ -111,7 +111,7 @@ def cols_to_numeric(df, col_list,dest = False):
         return [col_to_numeric(df,col_name) for col_name in col_list]
     for col_name in col_list:
         col_to_numeric(df,col_name,dest)
-        
+
 def cols_to_dt(df, col_list,set_format = None,infer_format = True,dest = False):
     if not dest:
         return [col_to_dt(df,col_name,set_format,infer_format) for col_name in col_list]
@@ -139,7 +139,7 @@ def cols_rename(df,col_names = [], new_col_names = []):
 # ------- Get formatting information ----------
 
 def col_dtypes(df): # Does some work to reduce possibility of errors and stuff
-    """ 
+    """
     Pandas datatypes are as follows:
     object,number,datetime,category,timedelta,datetimetz
     This method uses queues and iterates over the columns in linear time.
@@ -201,5 +201,3 @@ def col_isdtz(df,col_name = None):
         return col_list
     else:
         return col_name in col_list
-
-

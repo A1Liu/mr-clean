@@ -6,3 +6,13 @@ mc_checks - Includes simple logic to increase function safety and complexity of 
 mc_stats - non-destructive functions to get information on the dataframe or to transform the data.
 pre_clean - contains a summary method that summarizes DataFrames
 mr_clean - contains the 'clean' function
+
+
+
+import mr_clean.mr_clean as mrc
+mrc.clean
+mrc.summarize
+mrc.functions.[any of the functions]
+mrc.Cleaner
+mrc.Settings
+mrc.

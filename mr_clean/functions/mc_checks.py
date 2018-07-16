@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from mc_utils import rows
-from mc_funcs import colname_gen, col_scrubf,col_scrubb
+from mr_clean._utils.data_handling import rows
+from mr_clean.functions.basics import colname_gen, col_scrubf,col_scrubb
 
 def smart_scrub(df,col_name,cutoff = 1):
     scrubf = smart_scrubf(df,col_name,cutoff)

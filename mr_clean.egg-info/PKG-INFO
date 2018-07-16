@@ -2,7 +2,7 @@ Metadata-Version: 2.1
 Name: mr-clean
 Version: 0.0.1
 Summary: A small package for cleaning data.
-Home-page: https://github.com/pypa/sampleproject
+Home-page: https://github.com/A1Liu/mr_clean
 Author: A1Liu
 Author-email: albertymliu@gmail.com
 License: UNKNOWN
