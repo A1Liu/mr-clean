@@ -50,20 +50,23 @@ def percentiles(df,q =[0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1]):
     except ValueError:
         return None#"No columns with numeric data."
 
-def df_outliers(df):
+def df_outliers(df,sensitivity = 1.5):
     """ Finds outliers in the dataframe.
     Parameters:
     df - DataFrame
         The DataFrame to analyze.
+    sensitivity - number, default 1.5
+        The value to multipy by the iter-quartile range when determining outliers. This number is used
+        for categorical data as well.
     """
     outlier_df = df.copy()
     dtypes = _basics.col_dtypes(df)
     for col_name in df.columns:
-        outlier_df.loc[~outliers(df[col_name],'bool',dtypes[col_name]),col_name] = np.nan
+        outlier_df.loc[~outliers(df[col_name],'bool',dtypes[col_name],sensitivity),col_name] = np.nan
     outlier_df = outlier_df.dropna(how = 'all')
     return outlier_df
 
-def outliers(df,output_type = 'values',dtype = 'number'):# can output boolean array or values
+def outliers(df,output_type = 'values',dtype = 'number',sensitivity = 1.5):# can output boolean array or values
     """ Returns potential outliers as either a boolean array or a subset of the original.
     Parameters:
     df - array_like
@@ -71,22 +74,25 @@ def outliers(df,output_type = 'values',dtype = 'number'):# can output boolean ar
     output_type - string, default 'values'
         if 'values' is specified, then will output the values in the series that are suspected
         outliers. Else, a boolean array will be outputted, where True means the value is an outlier
-    dtype: string, default 'number'
+    dtype - string, default 'number'
         the way to treat the object. Possible values are 'number','datetime',
         'timedelt','datetimetz','category',or 'object'
+    sensitivity - number, default 1.5
+        The value to multipy by the iter-quartile range when determining outliers. This number is used
+        for categorical data as well.
     """
     if dtype in ('number','datetime','timedelt','datetimetz'):
         if not dtype == 'number':
             df = pd.to_numeric(df,errors = 'coerce')
         quart25, quart75 = percentiles(df,q = [.25,.75]) 
-        out_range= 1.5 * (quart75 - quart25)
+        out_range= sensitivity * (quart75 - quart25)
         lower_bound,upper_bound = quart25-out_range, quart75+out_range
         bool_array = (df < lower_bound)|(df > upper_bound)
     else:
         value_counts = df.value_counts() # Trying to find categorical outliers.
         quart25 = cum_percentile(value_counts,.25)
         quart75 = cum_percentile(value_counts,.75)
-        out_values = int(1.5 * (quart75 - quart25) + quart75 + 1)
+        out_values = int(sensitivity * (quart75 - quart25) + quart75 + 1)
         print(out_values)
         if out_values >= len(value_counts):
             bool_array = _utils.bc_vec(df,value = False)
