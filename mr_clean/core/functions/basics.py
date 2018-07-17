@@ -10,25 +10,39 @@ from collections import deque
 # --------- Blind ops on entire table ---------------------
 
 def colname_gen(df,col_name = 'unnamed_col'):
-        if col_name not in df.keys():
-            yield col_name
-        id_number = 0
-        while True:
-            col_name = col_name + str(id_number)
-            if col_name in df.keys():
-                id_number+=1
-            else:
-                return col_name
+    """ Returns a column name that isn't in the specified DataFrame
+    df - DataFrame
+        Dataframe to analyze
+    col_name - string, default 'unnamed_col'
+        Column name to use as the base value for the generated column name
+    """
+    if col_name not in df.keys():
+        yield col_name
+    id_number = 0
+    while True:
+        col_name = col_name + str(id_number)
+        if col_name in df.keys():
+            id_number+=1
+        else:
+            return col_name
 
 # --------- Blind ops on entire table (destructive) ----------------
 
 def clean_colnames(df):
+    """ Cleans the column names on a DataFrame
+    df - DataFrame
+        The DataFrame to clean
+    """
     col_list = []
     for index in range(_dutils.cols(df)):
         col_list.append(df.columns[index].strip().lower().replace(' ','_'))
     df.columns = col_list
 
-def reindex(df):
+def reindex(df): #TODO rewrite this or remove it,whichever is more convenient
+    """ Resets the index of a DataFrame
+    df - DataFrame
+        DataFrame to reset
+    """
     df.reset_index()
 
 # ----- Blind ops on single columns-------------

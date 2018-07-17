@@ -7,6 +7,9 @@ import mr_clean.core.functions.basics as _basics
 def dtypes_summary(df):
     """ Takes in a dataframe and returns a dataframe with
     information on the data-types present in each column.
+    Parameters:
+    df - DataFrame
+        Dataframe to summarize
     """
     output_df = pd.DataFrame([])
     row_count = df.shape[0]
@@ -38,12 +41,13 @@ def dtypes_summary(df):
     return output_df
 
 def percentiles(df,q =[0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1]):
-    """ Takes a dataframe and returns the quartiles for each column,
+    """ Takes a dataframe and returns the quantiles for each column,
     or an error message if there are no columns with quantitative data.
     Parameters:
     df - DataFrame
         The dataframe to analyze
-    
+    q - number or list of numbers, default [0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1]
+        Quantiles to get
     """
     try:
         return df.quantile(q = q)
@@ -104,8 +108,15 @@ def outliers(df,output_type = 'values',dtype = 'number',sensitivity = 1.5):# can
         return  df[bool_array]
     return bool_array
 
-def cum_percentile(df,q):
-    total = df.sum()
-    cum_sum = df.cumsum()
+def cum_percentile(series,q):
+    """ Takes a series of ordered frequencies and returns the value at a specified quantile
+    Parameters:
+    series - Series
+        The series to analyze
+    q - number
+        Quantile to get the value of
+    """
+    total = series.sum()
+    cum_sum = series.cumsum()
     return sum(cum_sum < total*q)
     

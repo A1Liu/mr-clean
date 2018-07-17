@@ -6,13 +6,13 @@ import pandas as pd
 
 
 def clean():
-    # For future implementation
+    # TODO For future implementation
     pass
 
 
 
-
-def validate(df,coerce_numeric,coerce_dt,coerce_categorical): # validates input
+# validates input
+def validate(df,coerce_numeric,coerce_dt,coerce_categorical): 
     assert type(df) is pd.DataFrame
     column_dict = {}
     for element in coerce_numeric + coerce_dt + coerce_categorical: # these lists must be mutually exclusive
