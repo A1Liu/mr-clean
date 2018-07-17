@@ -94,5 +94,5 @@ celerybeat-schedule
 # mypy
 .mypy_cache/
 
-#DS STORE
-.DS_STORE
+#DS Store
+.DS_Store
