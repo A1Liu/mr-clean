@@ -4,7 +4,7 @@ with open('README.md', 'r') as fh:
     long_description = fh.read()
 setup(
     name='mr_clean',
-    version='0.0.3',
+    version='0.0.4',
     author='A1Liu',
     author_email='albertymliu@gmail.com',
     description='A small package for cleaning data.',
