@@ -5,3 +5,6 @@ Changed the package structure to allow for easier development in future.
 
 #### Version 0.0.3
 Changed package structure again, and added more statistics methods.
+
+#### Version 0.0.4
+Added documentation for methods.
