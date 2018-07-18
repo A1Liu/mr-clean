@@ -23,11 +23,11 @@ def dtypes_summary(df):
         # number of values that can be coerced to a date-time object
         rows_date_time = pd.to_datetime(data,errors = 'coerce',infer_datetime_format = True).count()
         # categories in column
-        value_counts = data.value_counts()
+        value_counts = data.value_counts().reset_index()
         # number of different values in the dataframe
-        categories = data.value_counts().count()
+        categories = len(value_counts)
         # largest category
-        largest_category = value_counts[0]
+        largest_category = value_counts.iloc[0,1]
         # number of null/missing values
         rows_na = data.isnull().sum()
         # build the output list
@@ -97,7 +97,6 @@ def outliers(df,output_type = 'values',dtype = 'number',sensitivity = 1.5):# can
         quart25 = cum_percentile(value_counts,.25)
         quart75 = cum_percentile(value_counts,.75)
         out_values = int(sensitivity * (quart75 - quart25) + quart75 + 1)
-        print(out_values)
         if out_values >= len(value_counts):
             bool_array = _utils.bc_vec(df,value = False)
         else:

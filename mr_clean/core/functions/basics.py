@@ -315,22 +315,18 @@ def col_dtypes(df): # Does some work to reduce possibility of errors and stuff
         The DataFrame to return the object types of
     
     Pandas datatypes are as follows:
-    object,number,datetime,category,timedelta,datetimetz
+    object,number,bool,datetime,category,timedelta,datetimetz
     This method uses queues and iterates over the columns in linear time.
     It does extra steps to ensure that no further work with numpy datatypes needs
     to be done.
     """
-    test_list = [col_isobj,col_isnum,col_isdt,col_iscat,col_istdelt,col_isdtz]
+    test_list = [col_isobj,col_isnum,col_isbool,col_isdt,col_iscat,col_istdelt,col_isdtz]
     deque_list = [(deque(col_method(df)),name) \
                   for col_method,name in zip(test_list,_globals.__dtype_names) if len(col_method(df))]
     type_dict = {}
-    for col_name in df.columns:
-        for que,name in deque_list:
-            if len(que):
-                if que[0] == col_name:
-                    que.popleft()
-                    type_dict[col_name] = name
-                    break
+    for que, name in deque_list:
+        while len(que):
+            type_dict[que.popleft()] = name
     return type_dict
 
 def col_isobj(df, col_name = None):
@@ -342,7 +338,7 @@ def col_isobj(df, col_name = None):
     col_name - string, default None
         If specified, this function will True if df[col_name] is of type 'object'
     """
-    col_list = df.select_dtypes(include = ['object']).columns
+    col_list = df.select_dtypes(include = 'object').columns
     if col_name is None:
         return col_list
     else:
@@ -357,7 +353,22 @@ def col_isnum(df,col_name = None):
     col_name - string, default None
         If specified, this function will True if df[col_name] is of type 'number'
     """
-    col_list = df.select_dtypes(include = ['number']).columns
+    col_list = df.select_dtypes(include = 'number').columns
+    if col_name is None:
+        return col_list
+    else:
+        return col_name in col_list
+
+def col_isbool(df,col_name = None):
+    """ Returns a list of columns that are of type 'bool'. If col_name is specified, returns 
+    whether the column in the DataFrame is of type 'bool' instead.
+    Parameters:
+    df - DataFrame
+        DataFrame to check
+    col_name - string, default None
+        If specified, this function will True if df[col_name] is of type 'bool'
+    """
+    col_list = df.select_dtypes(include = 'bool').columns
     if col_name is None:
         return col_list
     else:
@@ -372,7 +383,7 @@ def col_isdt(df,col_name = None):
     col_name - string, default None
         If specified, this function will True if df[col_name] is of type 'datetime'
     """
-    col_list = df.select_dtypes(include = ['datetime']).columns
+    col_list = df.select_dtypes(include = 'datetime').columns
     if col_name is None:
         return col_list
     else:
@@ -387,7 +398,7 @@ def col_iscat(df,col_name = None):
     col_name - string, default None
         If specified, this function will True if df[col_name] is of type 'category'
     """
-    col_list = df.select_dtypes(include = ['category']).columns
+    col_list = df.select_dtypes(include = 'category').columns
     if col_name is None:
         return col_list
     else:
@@ -402,7 +413,7 @@ def col_istdelt(df,col_name = None):
     col_name - string, default None
         If specified, this function will True if df[col_name] is of type 'timedelta'
     """
-    col_list = df.select_dtypes(include = ['timedelta']).columns
+    col_list = df.select_dtypes(include = 'timedelta').columns
     if col_name is None:
         return col_list
     else:
@@ -417,7 +428,7 @@ def col_isdtz(df,col_name = None):
     col_name - string, default None
         If specified, this function will True if df[col_name] is of type 'datetimetz'
     """
-    col_list = df.select_dtypes(include = ['datetimetz']).columns
+    col_list = df.select_dtypes(include = 'datetimetz').columns
     if col_name is None:
         return col_list
     else:
