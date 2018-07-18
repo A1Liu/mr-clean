@@ -16,4 +16,4 @@ del(dependencies)
 del(dependency)
 del(missing_dependencies)
 
-from mr_clean._startup.api import *
+from mr_clean.core.api import *
