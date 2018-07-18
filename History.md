@@ -8,7 +8,7 @@ Changed package structure again, and added more statistics methods.
 
 #### Version 0.0.4
 * Added documentation for methods.  
-* Added corr_matrix function that expands on the functionality of pd.DataFrame.corr by adding support for categorical and boolean data.  
+* Added corr_matrix function that expands on the functionality of pd.DataFrame.corr by adding support for categorical and boolean data.
 * Added flexibility to the summarize function.
     * It now outputs describe for both numeric and non-numeric data.
     * It also now outputs a less noisy version of the outlier DataFrame, while maintaining the same amount of information
