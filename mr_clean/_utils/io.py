@@ -23,18 +23,19 @@ def convert_memory(memory_value):
 
 # --------- Formatting outputs ---------------------
 
-def preview(df,preview_rows = 5,preview_max_cols = 0):
+def preview(df,preview_rows = 5):#,preview_max_cols = 0):
     """ Returns a preview of a dataframe, which contains both header
     rows and tail rows.
     """
     assert type(df) is pd.DataFrame
     if preview_rows <= 0:
         preview_rows = 1
-    initial_max_cols = pd.get_option('display.max_columns')
-    pd.set_option('display.max_columns', preview_max_cols)
-    data = str(df.iloc[np.r_[0:preview_rows,-preview_rows:0]])
-    pd.set_option('display.max_columns', initial_max_cols)
-    return data
+    return df.iloc[np.r_[0:preview_rows,-preview_rows:0]]
+#    initial_max_cols = pd.get_option('display.max_columns')
+#    pd.set_option('display.max_columns', preview_max_cols)
+#    data = str(df.iloc[np.r_[0:preview_rows,-preview_rows:0]])
+#    pd.set_option('display.max_columns', initial_max_cols)
+#    return data
 
 def get_info(df, verbose = None,max_cols = None, memory_usage = None, null_counts = None):
     """ Returns the .info() output of a dataframe

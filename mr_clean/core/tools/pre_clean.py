@@ -14,7 +14,6 @@ def summarize(df,preview_rows = 2,
             memory_usage = 'deep',
             display_max_cols = None,display_width = None,
             output_path = None, output_safe = True): 
-    # TODO output directory functionality, output to csv separately
     """ Prints information about the DataFrame to a file or to the prompt.
 
     Parameters
@@ -40,6 +39,8 @@ def summarize(df,preview_rows = 2,
     """
     assert type(df) is _pd.DataFrame
     
+    # TODO output directory functionality, output to csv separately
+    
      # Get initial display settings
     initial_max_cols = _pd.get_option('display.max_columns')
     initial_max_rows = _pd.get_option('display.max_rows')
@@ -52,7 +53,7 @@ def summarize(df,preview_rows = 2,
             _pd.set_option('display.width',display_width)
 
     # --------Values of data-----------
-    df_preview = _io.preview(df,preview_rows,display_max_cols)
+    df_preview = _io.preview(df,preview_rows)
     
     try:
         df_desc_num = df.describe(include = 'number').transpose()
