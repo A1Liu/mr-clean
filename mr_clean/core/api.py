@@ -6,6 +6,7 @@
 from mr_clean.core.functions.basics import *
 from mr_clean.core.functions.scrub import *
 from mr_clean.core.functions.colnames import *
+from mr_clean.core.functions.coerce import *
 
 from mr_clean.core.stats.summary import *
 from mr_clean.core.stats.transform import *
