@@ -3,13 +3,16 @@ import pandas as pd
 import mr_clean.core.functions.basics as basics
 import mr_clean.core.functions.smart as sm
 import mr_clean.core.stats.summary as stats
-import mr_clean.core.stats.regression as reg
-
-
-
 
 def clean(df,error_rate = 0):
-    """
+    """ Superficially cleans data, i.e. changing simple things about formatting.
+    Parameters:
+    df - DataFrame
+        DataFrame to clean
+    error_rate - float {0 <= error_rate <= 1}, default 0
+        Maximum amount of errors/inconsistencies caused explicitly by cleaning, expressed
+        as a percentage of total dataframe rows (0 = 0%, .5 = 50%, etc.)
+        Ex: na values from coercing a column of data to numeric
     """
     df = df.copy()
     
@@ -33,19 +36,10 @@ def clean(df,error_rate = 0):
     
     # Change format of entries to numeric if possible
     dtype_stats = stats.dtypes_summary(df)
+    ['Preview','Describe','Percentile Details',
+     'Potential Outliers','Correlation Matrix']
     # use dtype stats to infer columns to change
     
     
     return df
     # TODO For future implementation
-
-
-
-# validates input
-def validate(df,coerce_numeric,coerce_dt,coerce_categorical): 
-    assert type(df) is pd.DataFrame
-    column_dict = {}
-    for element in coerce_numeric + coerce_dt + coerce_categorical: # these lists must be mutually exclusive
-        assert type(element) is str
-        assert not element in column_dict
-        column_dict[element] = True

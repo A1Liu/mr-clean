@@ -42,37 +42,13 @@ def summarize(df,preview_rows = 2,
     """
     assert type(df) is pd.DataFrame
     
-     # Get initial display settings
-    initial_max_cols = pd.get_option('display.max_columns')
-    initial_max_rows = pd.get_option('display.max_rows')
-    initial_width = pd.get_option('display.width')
-
     # Reformat displays
-    pd.set_option('display.max_columns', display_max_cols)
-    pd.set_option('display.max_rows',None)
-    if display_width is not None:
-            pd.set_option('display.width',display_width)
+    initial_settings = pd_settings(display_max_cols, None, display_width)
 
     # --------Values of data-----------
     df_preview = _io.preview(df,preview_rows)
     
-    try:
-        df_desc_num = df.describe(include = 'number').transpose()
-    except ValueError:
-        df_desc_num = None
-
-    try:
-        df_desc_cat = df.describe(exclude = 'number').transpose()
-    except ValueError:
-        df_desc_cat = None
-
-    if df_desc_num is not None and df_desc_cat is not None:
-        df_desc=str(df_desc_num) + '\n\n' + str(df_desc_cat)
-    else:
-        if df_desc_num is not None:
-            df_desc=str(df_desc_num)
-        else:
-            df_desc=str(df_desc_cat)
+    df_desc_num, df_desc_cat = detailed_desc(df)
     
     percent_values = stats.percentiles(df)
     
@@ -87,13 +63,13 @@ def summarize(df,preview_rows = 2,
     # ----------Build lists------------
     
     title_list = \
-    ['Preview','Describe','Percentile Details',
+    ['Preview','Describe (Numerical)','Describe (Categorical)','Percentile Details',
      'Potential Outliers','Correlation Matrix']
     info_list = \
-    [df_preview,df_desc,percent_values,
+    [df_preview,df_desc_num, df_desc_cat,percent_values,
      potential_outliers,corr_values]
-    error_list = [None,None,None,'No numerical data.',
-                  None,'No potential outliers.','No categorical, bool, or numerical data.']
+    error_list = [None,'No numerical data.','All numerical data.','No numerical data.',
+                  'No potential outliers.','No categorical, bool, or numerical data.']
     
     # ----------Build output------------
     
@@ -131,7 +107,30 @@ def summarize(df,preview_rows = 2,
         print('Done!')
 
     # Reset display settings
-    pd.set_option('display.max_columns', initial_max_cols)
-    pd.set_option('display.max_rows', initial_max_rows)
-    pd.set_option('display.width', initial_width)  
+    pd_settings(*initial_settings)
 
+
+def pd_settings(max_cols,max_rows,disp_width):
+    # Set pandas display settings and retrieve old settings
+    initial_max_cols = pd.get_option('display.max_columns')
+    initial_max_rows = pd.get_option('display.max_rows')
+    initial_width = pd.get_option('display.width')
+    
+    pd.set_option('display.max_columns', max_cols)
+    pd.set_option('display.max_rows', max_rows)
+    if disp_width is not None:
+        pd.set_option('display.width', disp_width)
+    return (initial_max_cols,initial_max_rows,initial_width)
+
+def detailed_desc(df):# Get information from df.describe past
+    # The pandas implementation
+    try:
+        df_desc_num = df.describe(include = 'number').transpose()
+    except ValueError:
+        df_desc_num = None
+
+    try:
+        df_desc_cat = df.describe(exclude = 'number').transpose()
+    except ValueError:
+        df_desc_cat = None
+    return (df_desc_num,df_desc_cat)
