@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
-import numpy as np
 import io
 import shutil
+import math
 
 # --------- Memory Information ---------------------
 
@@ -23,19 +23,17 @@ def convert_memory(memory_value):
 
 # --------- Formatting outputs ---------------------
 
-def preview(df,preview_rows = 5):#,preview_max_cols = 0):
+def preview(df,preview_rows = 20):#,preview_max_cols = 0):
     """ Returns a preview of a dataframe, which contains both header
     rows and tail rows.
     """
-    assert type(df) is pd.DataFrame
-    if preview_rows <= 0:
-        preview_rows = 1
-    return df.iloc[np.r_[0:preview_rows,-preview_rows:0]]
-#    initial_max_cols = pd.get_option('display.max_columns')
-#    pd.set_option('display.max_columns', preview_max_cols)
-#    data = str(df.iloc[np.r_[0:preview_rows,-preview_rows:0]])
-#    pd.set_option('display.max_columns', initial_max_cols)
-#    return data
+    if preview_rows < 4:
+        preview_rows = 4
+    preview_rows = min(preview_rows,df.shape[0])
+    outer = math.floor(preview_rows / 4)
+    return pd.concat([df.head(outer),
+                      df[outer:-outer].sample(preview_rows-2*outer),
+                      df.tail(outer)])
 
 def get_info(df, verbose = None,max_cols = None, memory_usage = None, null_counts = None):
     """ Returns the .info() output of a dataframe

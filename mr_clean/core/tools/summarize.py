@@ -10,7 +10,7 @@ import mr_clean.core.stats.regression as regstats
 # This method takes in a DataFrame object, as well as a few parameters,
 # and outputs a DataFrame that summarizes some of the possible problems
 # that might have to be addressed in cleaning
-def summarize(df,preview_rows = 2,
+def summarize(df,preview_rows = 8,
             display_max_cols = None,display_width = None,
             output_path = None, output_safe = True,to_folder = False): 
     """ Prints information about the DataFrame to a file or to the prompt.
@@ -47,18 +47,11 @@ def summarize(df,preview_rows = 2,
 
     # --------Values of data-----------
     df_preview = _io.preview(df,preview_rows)
-    
     df_desc_num, df_desc_cat = detailed_desc(df)
-    
     percent_values = stats.percentiles(df)
-    
     potential_outliers = stats.df_outliers(df).dropna(axis = 1,how = 'all')
-    potential_outliers = potential_outliers if _utils.rows(potential_outliers) \
-                    else None
-    
+    potential_outliers = potential_outliers if _utils.rows(potential_outliers) else None
     corr_values = regstats.corr_matrix(df)
-    corr_values = 'Correlation Matrix skipped: No categorical, bool, or numerical data.' \
-            if corr_values is None else corr_values
 
     # ----------Build lists------------
     
