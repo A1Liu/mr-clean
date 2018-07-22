@@ -82,8 +82,3 @@ def smart_scrubb(df,col_name,cutoff = 1):
         new_col_name = _basics.colname_gen(df,"{}_sb-{}".format(col_name,scrubbed))
         df[new_col_name] = which
     return scrubbed
-
-def smart_coerce():
-    """
-    """
-    pass
