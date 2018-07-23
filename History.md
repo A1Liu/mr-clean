@@ -15,6 +15,10 @@
     * Subset of functionality originally in 'summarize' function.
     * Preview of dataset, df.info(), df data types, and potential outliers
     * Preview of dataset works exactly how preview works in new summarize function
+* Added clean function
+    * Reformats column names to lowercase, with underscores instead of spaces
+    * Tries to remove whitespace and extra characters when possible
+    * More features coming soon
 
 #### Version 0.0.4
 * Added documentation for methods.  
