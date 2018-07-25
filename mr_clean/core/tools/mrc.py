@@ -2,6 +2,7 @@
 #import pandas as pd
 import mr_clean.core.functions.basics as basics
 from mr_clean.core.functions.scrub import smart_scrub
+import pandas as pd
 #import mr_clean.core.stats.summary as stats
 
 def clean(df,error_rate = 0):
@@ -50,4 +51,33 @@ def clean(df,error_rate = 0):
     # TODO For future implementation
 
 def coerce_col(df,col_name,error_rate):
-    pass
+    """ Change column datatype according to contents of column.
+    Parameters:
+    df - DataFrame
+        DataFrame to edit
+    col_name - str
+        String that represents a column name
+    error_rate - float
+        Maximum amount of errors/inconsistencies caused explicitly by this function
+    """
+    as_cat = df[col_name].astype('category')
+    as_num = pd.to_numeric(df[col_name], errors = 'coerce')
+    as_dt = pd.to_datetime(df[col_name],errors = 'coerce',infer_datetime_format = True)
+    
+    dtypes = ['category','number','datetime']
+    
+    new_cols = [as_cat,as_num,as_dt]
+    
+    error_rates = [col.isnull().sum() for col in new_cols]
+    error_rates[0] = len(new_cols[0].value_counts())
+    lowest_rate = min(error_rates)
+    
+    for index in range(3):
+        if error_rates[index] < error_rate and \
+            error_rates[index] <= lowest_rate:
+                df[col_name] = new_cols[index]
+                return dtypes[index]
+
+
+
+
