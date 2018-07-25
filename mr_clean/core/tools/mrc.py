@@ -2,6 +2,7 @@
 #import pandas as pd
 import mr_clean.core.functions.basics as basics
 from mr_clean.core.functions.scrub import smart_scrub
+from mr_clean.core.functions.colnames import smart_colnames
 import pandas as pd
 #import mr_clean.core.stats.summary as stats
 
@@ -18,8 +19,7 @@ def clean(df,error_rate = 0):
     df = df.copy()
     
     # Change colnames
-    basics.clean_colnames(df)
-    # Eventually use a more advanced function to clean colnames
+    df.columns = smart_colnames(df)
     print('Changed colnames to {}'.format(df.columns))
     
     # Remove extra whitespace
@@ -48,7 +48,6 @@ def clean(df,error_rate = 0):
         if new_dtype is not None:
             print("Coerced '{}' to datatype '{}'".format(col_name, new_dtype))  
     return df
-    # TODO For future implementation
 
 def coerce_col(df,col_name,error_rate):
     """ Change column datatype according to contents of column.

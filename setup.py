@@ -18,6 +18,6 @@ setup(
         'Operating System :: OS Independent'
     ],
     install_requires=[
-          'pandas','numpy' # ,'glob'
+          'pandas','numpy','anytree' # ,'glob'
       ]
 )

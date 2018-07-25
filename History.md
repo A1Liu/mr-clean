@@ -3,6 +3,7 @@
 #### Version 0.0.6
 
 * Added datatype changing to clean function
+* Changed clean_colnames to be non-destructive
 
 #### Version 0.0.5
 

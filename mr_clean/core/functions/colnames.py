@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+from mr_clean._utils.substrings import substr_list
 
 def smart_colnames(df, cutoff = .5):
     """ Replace spaces and dashes with underscores and make everything lowercase
@@ -20,4 +22,68 @@ def smart_colnames(df, cutoff = .5):
             add abbreviation to the dictionary
             add (phrase,abbreviation) to list
     """
-    pass
+    
+    col_list = []
+    # Removing whitespace and making everything lowercase
+    for col_name in df.columns:
+        new_colname = col_name.strip().lower()
+        new_colname = re.sub('\s+','_',new_colname)
+        col_list.append(new_colname)
+    
+    # Dictionary of words in the columns
+    word_dict = col_words(col_list)
+    word_list = list(word_dict.keys())
+    phrase_list = substr_list(col_list)
+    
+    
+    
+    return col_list
+
+
+def col_words(col_list):
+    """ Get the list of words in the columns
+    Parameters:
+    col_list - list of strings
+        List of column names
+    """
+    col_dict = {}
+    for col_name in col_list:
+        words = col_name.split('_')
+        for word in words:
+            if word in col_dict.keys():
+                col_dict[word]+=1
+            else:
+                col_dict[word]=1
+    return col_dict
+
+def abbrev(phrase,word_length = 1):
+    """ Abbreviates a phrase
+    Parameters:
+    phrase - str
+        Phrase to abbreviate
+    word_length - int, default 1
+        Length of each word after abbreviation
+
+    Ex:
+        word_word_2word
+    word_length 1: ww2w
+    word_length 2: wowo2wo
+    """
+    word_list = phrase.split('_')
+    abbreviation = ''
+    for word in word_list:
+        recording = 0
+        for character in word:
+            if isnum(character):
+                recording = 0
+                abbreviation+=character
+            elif recording < word_length:
+                abbreviation+=character
+                recording+=1
+    return abbreviation
+
+def isnum(character):
+    return character in ['0','1,','2','3','4','5','6','7','8','9']
+
+
+

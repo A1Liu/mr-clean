@@ -27,10 +27,8 @@ def colname_gen(df,col_name = 'unnamed_col'):
         else:
             return col_name
 
-# --------- Blind ops on entire table (destructive) ----------------
-
 def clean_colnames(df):
-    """ Cleans the column names on a DataFrame
+    """ Cleans the column names on a DataFrame and returns the new names
     Parameters:
     df - DataFrame
         The DataFrame to clean
@@ -38,7 +36,7 @@ def clean_colnames(df):
     col_list = []
     for index in range(_dutils.cols(df)):
         col_list.append(df.columns[index].strip().lower().replace(' ','_'))
-    df.columns = col_list
+    return col_list
 
 # ----- Blind ops on single columns -------------
 
