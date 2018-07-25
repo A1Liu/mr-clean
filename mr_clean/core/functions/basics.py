@@ -40,7 +40,7 @@ def clean_colnames(df):
         col_list.append(df.columns[index].strip().lower().replace(' ','_'))
     df.columns = col_list
 
-# ----- Blind ops on single columns-------------
+# ----- Blind ops on single columns -------------
 
 def col_strip(df,col_name,dest = False):
     """ Performs str.strip() a column of a DataFrame
