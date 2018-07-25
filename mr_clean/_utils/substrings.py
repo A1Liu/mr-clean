@@ -17,9 +17,9 @@ def substr_list(str_list,length = -1,repeats = True):
         Whether or not elements in the list can be substrings of longer elements in the list. 
         
         WARNING:
-        If set to false, runtime of this function could increase substantially. Checking for repeats is 
-        currently on the order of O(n^2*s) operation, where n is the amount of elements and s is the
-        average length of the strings in the list.
+        If set to false, runtime of this function could increase substantially. Checking for 
+        repeats is currently on the order of O(n^2*s) operation, where 'n' is the amount of 
+        elements and 's' is the average length of the strings in the list.
     
     Ex:
         substr_list(['asdf','dfwed','_as'])
@@ -37,7 +37,7 @@ def substr_list(str_list,length = -1,repeats = True):
     
     # Documentation for tree structure https://pypi.org/project/anytree/
     
-    # Method: Suffix Tree
+    # Method: Suffix Tree https://en.wikipedia.org/wiki/Generalized_suffix_tree
     
     # Description: https://en.wikipedia.org/wiki/Longest_common_substring_problem
     
