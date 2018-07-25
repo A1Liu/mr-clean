@@ -1,5 +1,8 @@
 # Changelog
 
+#### Version 0.0.6
+
+* Added datatype changing to clean function
 
 #### Version 0.0.5
 
