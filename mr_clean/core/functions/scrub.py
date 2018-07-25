@@ -2,7 +2,7 @@
 import mr_clean._utils.data_handling as _utils
 import mr_clean.core.functions.basics as _basics
 
-def smart_scrub(df,col_name,cutoff = 1):
+def smart_scrub(df,col_name,error_rate = 0):
     """ Scrubs from the front and back of an 'object' column in a DataFrame
     until the scrub would semantically alter the contents of the column. If only a 
     subset of the elements in the column are scrubbed, then a boolean array indicating which
@@ -12,16 +12,15 @@ def smart_scrub(df,col_name,cutoff = 1):
         DataFrame to scrub
     col_name - string
         Name of column to scrub
-    cutoff - number, default 1
-        The cutoff that determines when to stop scrubbing. Should be a number between 0 and 1,
-        where 0 means that the entire column is scrubbed, and 1 means that only elements that are similar accross
-        all elements are scrubbed.
+    error_rate - number, default 0
+        The maximum amount of values this function can ignore while scrubbing, expressed as a
+        fraction of the total amount of rows in the dataframe. 
     """
-    scrubf = smart_scrubf(df,col_name,cutoff)
-    scrubb = smart_scrubb(df,col_name,cutoff)
+    scrubf = smart_scrubf(df,col_name,error_rate)
+    scrubb = smart_scrubb(df,col_name,error_rate)
     return (scrubf, scrubb)
 
-def smart_scrubf(df,col_name,cutoff = 1):
+def smart_scrubf(df,col_name,error_rate = 0):
     """ Scrubs from the front of an 'object' column in a DataFrame
     until the scrub would semantically alter the contents of the column. If only a 
     subset of the elements in the column are scrubbed, then a boolean array indicating which
@@ -30,17 +29,16 @@ def smart_scrubf(df,col_name,cutoff = 1):
         DataFrame to scrub
     col_name - string
         Name of column to scrub
-    cutoff - number, default 1
-        The cutoff that determines when to stop scrubbing. Should be a number between 0 and 1,
-        where 0 means that the entire column is scrubbed, and 1 means that only elements that are similar accross
-        all elements are scrubbed.
+    error_rate - number, default 0
+        The maximum amount of values this function can ignore while scrubbing, expressed as a
+        fraction of the total amount of rows in the dataframe. 
     """
     scrubbed = ""
     while True:
         valcounts = df[col_name].str[:len(scrubbed)+1].value_counts()
         if not len(valcounts):
             break
-        if not valcounts[0] >= cutoff * _utils.rows(df):
+        if not valcounts[0] >= (1-error_rate) * _utils.rows(df):
             break
         scrubbed=valcounts.index[0]
     if scrubbed == '':
@@ -52,7 +50,7 @@ def smart_scrubf(df,col_name,cutoff = 1):
         df[new_col_name] = which
     return scrubbed
 
-def smart_scrubb(df,col_name,cutoff = 1):
+def smart_scrubb(df,col_name,error_rate = 0):
     """ Scrubs from the back of an 'object' column in a DataFrame
     until the scrub would semantically alter the contents of the column. If only a 
     subset of the elements in the column are scrubbed, then a boolean array indicating which
@@ -61,17 +59,16 @@ def smart_scrubb(df,col_name,cutoff = 1):
         DataFrame to scrub
     col_name - string
         Name of column to scrub
-    cutoff - number, default 1
-        The cutoff that determines when to stop scrubbing. Should be a number between 0 and 1,
-        where 0 means that the entire column is scrubbed, and 1 means that only elements that are similar accross
-        all elements are scrubbed.
+    error_rate - number, default 0
+        The maximum amount of values this function can ignore while scrubbing, expressed as a
+        fraction of the total amount of rows in the dataframe. 
     """
     scrubbed = ""
     while True:
         valcounts = df[col_name].str[-len(scrubbed)-1:].value_counts()
         if not len(valcounts):
             break
-        if not valcounts[0] >= cutoff * _utils.rows(df):
+        if not valcounts[0] >= (1-error_rate) * _utils.rows(df):
             break
         scrubbed=valcounts.index[0]
     if scrubbed == '':
@@ -82,8 +79,3 @@ def smart_scrubb(df,col_name,cutoff = 1):
         new_col_name = _basics.colname_gen(df,"{}_sb-{}".format(col_name,scrubbed))
         df[new_col_name] = which
     return scrubbed
-
-def smart_coerce():
-    """
-    """
-    pass

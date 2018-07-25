@@ -40,14 +40,6 @@ def clean_colnames(df):
         col_list.append(df.columns[index].strip().lower().replace(' ','_'))
     df.columns = col_list
 
-def reindex(df): #TODO rewrite this or remove it,whichever is more convenient
-    """ Resets the index of a DataFrame
-    Parameters:
-    df - DataFrame
-        DataFrame to reset
-    """
-    df.reset_index()
-
 # ----- Blind ops on single columns-------------
 
 def col_strip(df,col_name,dest = False):
