@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
-from mr_clean._utils.substrings import substr_list
+from mr_clean._utils.substrings.substr_main import substr_list
 
 def smart_colnames(df, cutoff = .5):
     """ Replace spaces and dashes with underscores and make everything lowercase

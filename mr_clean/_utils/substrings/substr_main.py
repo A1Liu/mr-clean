@@ -4,8 +4,10 @@
 
 import pandas as pd
 from anytree import Node
+from mr_clean._utils.substrings.suffix_tree import suffix_tree
+from mr_clean._utils.substrings.substr_list import substr_list
 
-def substr_list(str_list,length = -1,repeats = True):
+def substr_list(str_list,length = -1,min_freq = 2,repeats = True):
     """ Gets a list of common substrings, ordered by length
     Parameters:
     str_list - list of strings
@@ -13,24 +15,33 @@ def substr_list(str_list,length = -1,repeats = True):
     length - int, default -1
         Lower limit for the length of the strings in the list. All strings with length
         equal to or less than the limit are returned. If set to -1, then all will be returned
+    min_freq - int, default 2
+        Minimum frequency of the substring necessary to include it in the list
     repeats - bool, default True
-        Whether or not elements in the list can be substrings of longer elements in the list. 
+        Whether or not elements in the list that originate as substrings of other elements will
+        remain in the list.
         
-        WARNING:
-        If set to false, runtime of this function could increase substantially. Checking for 
-        repeats is currently on the order of O(n^2*s) operation, where 'n' is the amount of 
-        elements and 's' is the average length of the strings in the list.
+    WARNING:
+    If set to false, runtime of this function could increase substantially. Checking for repeats is 
+    currently on the order of O(n^2*s) operation, where n is the amount of elements and s is the
+    average length of the strings in the list.
     
     Ex:
-        substr_list(['asdf','dfwed','_as'])
+        substr_list(['dasdf','dfwed','_as'])
         output = ['df','as','a','s','d','f','w','e','_']
     
     Ex: 
-        substr_list(['asdf','dfwed','_as'],length = 2)
+        substr_list(['dasdf','dfwed','_as'],length = 2)
         output = ['df','as']
     Ex:
-        substr_list(['asdf','dfwed','_as'],repeats = False)
-        output = ['df','as','w','e','_']
+        substr_list(['dasdf','dfwed','_as'],repeats = False)
+        output = ['df','as','w','e','d','_']
+        
+        substr_list(['wasd','wasd','awa'],repeats = False)
+        output = ['wasd','wa']
+        Since 'sd','d','as', and 'asd' all are only present as substrings of 'wasd', they
+        are not included in the final results. However, 'wa' is present both in 'wasd' and
+        in 'awa', outside of the string 'wasd', and thus is included.
     """
     
     str_list = pd.Series(str_list)
@@ -56,11 +67,6 @@ def substr_list(str_list,length = -1,repeats = True):
     
     return substr_list
 
-def suffix_tree(str_list):
-    pass
-
-def substr_unfiltered(suf_tree):
-    pass
 
 def sort_by_length(str_list):
     pass
@@ -68,5 +74,3 @@ def sort_by_length(str_list):
 def filter_by_length(str_list):
     pass
 
-def filter_by_repetition(str_list):
-    pass
