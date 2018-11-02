@@ -4,7 +4,8 @@
 
 * Added datatype changing to clean function
 * Changed clean_colnames to be non-destructive
-* Added function to perform longest common substring computation, and use results to shorten column names.
+* Bug fixes
+<!-- * Added function to perform longest common substring computation, and use results to shorten column names. -->
 
 #### Version 0.0.5
 
