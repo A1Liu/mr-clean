@@ -7,6 +7,9 @@ def smart_colnames(df, cutoff = .5):
     remove underscores before and after
     replace multiple underscores with just one
     Create dictionary of taken words, with counts cooresponding to occurence rate
+
+    Use N-grams to do this faster and easier -- dictionary of string tuples? Maybe an ordered list instead?
+
     Loop:
         Find words/phrases common among large portion of columns (according to cutoff)
         For each word/phrase:
@@ -22,21 +25,24 @@ def smart_colnames(df, cutoff = .5):
             add abbreviation to the dictionary
             add (phrase,abbreviation) to list
     """
-    
+
     col_list = []
     # Removing whitespace and making everything lowercase
     for col_name in df.columns:
-        new_colname = col_name.strip().lower()
-        new_colname = re.sub('\s+','_',new_colname)
-        col_list.append(new_colname)
-    
+		col_name = re.sub('[^a-zA-Z0-9]',' ',col_name)
+        col_name = col_name.strip().lower()
+        col_name = re.sub('\s+','_',col_name)
+
+        col_list.append(col_name)
+
     # Dictionary of words in the columns
-    word_dict = col_words(col_list)
+    word_dict,max_len = col_words(col_list)
+    # Max len is 1 greater than the length of largest string tuple that we'll test for
     word_list = list(word_dict.keys())
-    phrase_list = substr_list(col_list)
-    
-    
-    
+
+
+
+
     return col_list
 
 
@@ -47,14 +53,16 @@ def col_words(col_list):
         List of column names
     """
     col_dict = {}
+    max_len = 1
     for col_name in col_list:
         words = col_name.split('_')
+        max_len = max(len(words),max_len)
         for word in words:
             if word in col_dict.keys():
                 col_dict[word]+=1
             else:
                 col_dict[word]=1
-    return col_dict
+    return (col_dict,max_len)
 
 def abbrev(phrase,word_length = 1):
     """ Abbreviates a phrase
@@ -84,6 +92,3 @@ def abbrev(phrase,word_length = 1):
 
 def isnum(character):
     return character in ['0','1,','2','3','4','5','6','7','8','9']
-
-
-

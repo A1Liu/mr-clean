@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 import anytree
 
+# Resources
+# https://github.com/cceh/suffix-tree
+# https://github.com/Rerito/suffix-tree/blob/master/suffixtree.h
+# http://brenden.github.io/ukkonen-animation/
 
 def suffix_tree(str_list):
-    # Recursively build suffix tree
+    # Build suffix tree using Ukkonen’s algorithm
     
     # Return at end
     pass
