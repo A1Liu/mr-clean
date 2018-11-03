@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+import warnings
+
+warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
 
 __all__ = ['_utils','functions','main','stats']
 dependencies = ['pandas','numpy']
@@ -12,8 +16,11 @@ for dependency in dependencies:
 
 if missing_dependencies:
     raise ImportError("Missing required dependencies {0}".format(missing_dependencies))
-del(dependencies)
-del(dependency)
-del(missing_dependencies)
+del dependencies, missing_dependencies, dependency
+# del
+# del
+
 
 from mr_clean.core.api import *
+
+del warnings

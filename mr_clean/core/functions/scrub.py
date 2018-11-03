@@ -4,7 +4,7 @@ import mr_clean.core.functions.basics as _basics
 
 def smart_scrub(df,col_name,error_rate = 0):
     """ Scrubs from the front and back of an 'object' column in a DataFrame
-    until the scrub would semantically alter the contents of the column. If only a 
+    until the scrub would semantically alter the contents of the column. If only a
     subset of the elements in the column are scrubbed, then a boolean array indicating which
     elements have been scrubbed is appended to the dataframe. Returns a tuple of the strings removed
     from the front and back of the elements
@@ -14,15 +14,16 @@ def smart_scrub(df,col_name,error_rate = 0):
         Name of column to scrub
     error_rate - number, default 0
         The maximum amount of values this function can ignore while scrubbing, expressed as a
-        fraction of the total amount of rows in the dataframe. 
+        fraction of the total amount of rows in the dataframe.
     """
+
     scrubf = smart_scrubf(df,col_name,error_rate)
     scrubb = smart_scrubb(df,col_name,error_rate)
     return (scrubf, scrubb)
 
 def smart_scrubf(df,col_name,error_rate = 0):
     """ Scrubs from the front of an 'object' column in a DataFrame
-    until the scrub would semantically alter the contents of the column. If only a 
+    until the scrub would semantically alter the contents of the column. If only a
     subset of the elements in the column are scrubbed, then a boolean array indicating which
     elements have been scrubbed is appended to the dataframe. Returns the string that was scrubbed
     df - DataFrame
@@ -31,14 +32,14 @@ def smart_scrubf(df,col_name,error_rate = 0):
         Name of column to scrub
     error_rate - number, default 0
         The maximum amount of values this function can ignore while scrubbing, expressed as a
-        fraction of the total amount of rows in the dataframe. 
+        fraction of the total amount of rows in the dataframe.
     """
     scrubbed = ""
     while True:
         valcounts = df[col_name].str[:len(scrubbed)+1].value_counts()
-        if not len(valcounts):
+        if len(valcounts) == 0:
             break
-        if not valcounts[0] >= (1-error_rate) * _utils.rows(df):
+        if not valcounts[0] > (1-error_rate) * _utils.rows(df):
             break
         scrubbed=valcounts.index[0]
     if scrubbed == '':
@@ -52,7 +53,7 @@ def smart_scrubf(df,col_name,error_rate = 0):
 
 def smart_scrubb(df,col_name,error_rate = 0):
     """ Scrubs from the back of an 'object' column in a DataFrame
-    until the scrub would semantically alter the contents of the column. If only a 
+    until the scrub would semantically alter the contents of the column. If only a
     subset of the elements in the column are scrubbed, then a boolean array indicating which
     elements have been scrubbed is appended to the dataframe. Returns the string that was scrubbed.
     df - DataFrame
@@ -61,14 +62,14 @@ def smart_scrubb(df,col_name,error_rate = 0):
         Name of column to scrub
     error_rate - number, default 0
         The maximum amount of values this function can ignore while scrubbing, expressed as a
-        fraction of the total amount of rows in the dataframe. 
+        fraction of the total amount of rows in the dataframe.
     """
     scrubbed = ""
     while True:
         valcounts = df[col_name].str[-len(scrubbed)-1:].value_counts()
-        if not len(valcounts):
+        if len(valcounts) == 0:
             break
-        if not valcounts[0] >= (1-error_rate) * _utils.rows(df):
+        if not valcounts[0] > (1-error_rate) * _utils.rows(df):
             break
         scrubbed=valcounts.index[0]
     if scrubbed == '':

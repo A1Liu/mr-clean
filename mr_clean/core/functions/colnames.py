@@ -29,7 +29,7 @@ def smart_colnames(df, cutoff = .5):
     col_list = []
     # Removing whitespace and making everything lowercase
     for col_name in df.columns:
-		col_name = re.sub('[^a-zA-Z0-9]',' ',col_name)
+        col_name = re.sub('[^a-zA-Z0-9]',' ',col_name)
         col_name = col_name.strip().lower()
         col_name = re.sub('\s+','_',col_name)
 
